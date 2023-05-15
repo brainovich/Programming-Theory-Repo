@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class SphereControlls : MonoBehaviour
 {
-    private Rigidbody playerRb;
+    protected Rigidbody playerRb;
+    private Camera mainCamera;
     private float speed = 2f;
-    [SerializeField] GameObject mainCamera;
-    private float xDeg;
     private Vector3 camOffset;
     private float camSmooth = 0.9f;
     private float camRotationSpeed = 1f;
-    float yCamDeg;
     
 
     // Start is called before the first frame update
@@ -19,6 +17,7 @@ public class SphereControlls : MonoBehaviour
     {
         playerRb = gameObject.GetComponent<Rigidbody>();
         camOffset = new Vector3(0, 4.5f, -5);
+        mainCamera = Camera.main;
     }
 
     // Update is called once per frame
@@ -44,7 +43,6 @@ public class SphereControlls : MonoBehaviour
         Vector3 camPos = transform.position + camOffset;
         mainCamera.transform.position = Vector3.Slerp(mainCamera.transform.position, camPos, camSmooth);
         mainCamera.transform.LookAt(transform.position);
-        yCamDeg = mainCamera.transform.localRotation.y;
     }
 
     public void Movement()
