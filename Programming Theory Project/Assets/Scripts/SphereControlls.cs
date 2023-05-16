@@ -5,11 +5,12 @@ using UnityEngine;
 public class SphereControlls : MonoBehaviour
 {
     protected Rigidbody playerRb;
-    private Camera mainCamera;
+    protected Camera mainCamera;
     private float speed = 2f;
     private Vector3 camOffset;
     private float camSmooth = 0.9f;
     private float camRotationSpeed = 1f;
+    [SerializeField] protected float camEulerAngleY;
     
 
     // Start is called before the first frame update
@@ -25,7 +26,12 @@ public class SphereControlls : MonoBehaviour
     {
         
         CameraPosition();
-        
+        camEulerAngleY = mainCamera.transform.localEulerAngles.y;
+        if(camEulerAngleY > 180)
+        {
+            camEulerAngleY = (360 - camEulerAngleY) * -1;
+        }
+        transform.rotation = Quaternion.Euler(transform.rotation.x, camEulerAngleY, transform.rotation.z);
     }
 
     private void LateUpdate()
@@ -45,8 +51,8 @@ public class SphereControlls : MonoBehaviour
         mainCamera.transform.LookAt(transform.position);
     }
 
-    public void Movement()
+    public virtual void Movement()
     {
-        playerRb.AddForce(Input.GetAxis("Vertical") * GameObject.Find("Child").transform.forward * speed);
+        playerRb.AddRelativeForce(Input.GetAxis("Vertical") * Vector3.forward * speed);
     }   
 }
