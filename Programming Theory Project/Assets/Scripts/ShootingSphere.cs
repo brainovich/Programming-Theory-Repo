@@ -2,26 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShootingSphere : SphereControlls
+public class ShootingSphere : SphereControlls //INHERITANCE
 {
     [SerializeField] GameObject bullet;
-    [SerializeField] float bulletSpeed = 10f;
-    [SerializeField] float camEulerAngle2;
-    [SerializeField] float recoil = 2.0f;
+    private float camEulerAngleY_shoot;
+    private float speedLimit = 25f;
 
-    // Update is called once per frame
     void Update()
     {
-        camEulerAngle2 = Camera.main.transform.localEulerAngles.y;
-        camEulerAngle2 *= -1;
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Instantiate(bullet, transform.localPosition + (transform.forward * 2), Quaternion.Euler(90, 0, camEulerAngle2));
+            Shoot();
+        }
+        Movement();
+    }
+
+    public override void Movement() //POLYMORPHISM
+    {
+        base.Movement();
+
+        //add limitation of speed
+        if(playerRb.velocity.magnitude >= speedLimit)
+        {
+            playerRb.velocity = playerRb.velocity.normalized * speedLimit;
         }
     }
 
-    public override void Movement()
+    private void Shoot() //ABSTRACTION
     {
-        playerRb.AddRelativeForce(Input.GetAxis("Vertical") * Vector3.forward *0.001f);
+        camEulerAngleY_shoot = Camera.main.transform.localEulerAngles.y; //find the y rotation angle of the camera
+        camEulerAngleY_shoot *= -1; // make it negative
+        Instantiate(bullet, transform.localPosition + (transform.forward * 2), Quaternion.Euler(90, 0, camEulerAngleY_shoot)); //shoot along the y rotation axis of the camera
     }
 }

@@ -5,19 +5,14 @@ using UnityEngine;
 public class BulletControlls : MonoBehaviour
 {
     private float time;
-    [SerializeField] float bulletSpeed;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
+        //make a bullet move forward
         time += Time.deltaTime;
-        transform.Translate(Vector3.up * bulletSpeed * time);
+        transform.Translate(Vector3.up * time);
+
+        //make a bullet to be destroyed out of bounds
         if(transform.position.x > 500 || transform.position.x < -500 || transform.position.z > 500 || transform.position.z < -500)
         {
             Destroy(gameObject);

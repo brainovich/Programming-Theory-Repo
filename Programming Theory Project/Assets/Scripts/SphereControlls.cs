@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class SphereControlls : MonoBehaviour
 {
+    //rigidbody variables
     protected Rigidbody playerRb;
-    protected Camera mainCamera;
     private float speed = 2f;
-    private Vector3 camOffset;
-    private float camSmooth = 0.9f;
-    private float camRotationSpeed = 1f;
-    [SerializeField] protected float camEulerAngleY;
-    
 
-    // Start is called before the first frame update
+    //camera variables
+    private Camera mainCamera;
+    private Vector3 camOffset;
+    private float camEulerAngleY;
+
     void Start()
     {
         playerRb = gameObject.GetComponent<Rigidbody>();
@@ -21,38 +20,30 @@ public class SphereControlls : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
         CameraPosition();
-        camEulerAngleY = mainCamera.transform.localEulerAngles.y;
-        if(camEulerAngleY > 180)
-        {
-            camEulerAngleY = (360 - camEulerAngleY) * -1;
-        }
-        transform.rotation = Quaternion.Euler(transform.rotation.x, camEulerAngleY, transform.rotation.z);
-    }
-
-    private void LateUpdate()
-    {
         Movement();
     }
 
-
-
-    public void CameraPosition()
+    public void CameraPosition() //ABSTRACTION
     {
-
-        Quaternion camTurnAngle = Quaternion.AngleAxis(Input.GetAxis("Mouse X") * camRotationSpeed, Vector3.up);
-        camOffset = camTurnAngle * camOffset;
-        Vector3 camPos = transform.position + camOffset;
-        mainCamera.transform.position = Vector3.Slerp(mainCamera.transform.position, camPos, camSmooth);
-        mainCamera.transform.LookAt(transform.position);
+        Quaternion camTurnAngle = Quaternion.AngleAxis(Input.GetAxis("Mouse X"), Vector3.up); //set an orbit of camera
+        camOffset = camTurnAngle * camOffset; //set an orbit of camera
+        mainCamera.transform.position = transform.position + camOffset; //offset to the camera position on the orbit
+        mainCamera.transform.LookAt(transform.position); //make the camera to follow the player
     }
 
-    public virtual void Movement()
+    public virtual void Movement() //ABSTRACTION
     {
-        playerRb.AddRelativeForce(Input.GetAxis("Vertical") * Vector3.forward * speed);
+        playerRb.AddRelativeForce(Input.GetAxis("Vertical") * Vector3.forward * speed); //make the ball to move forward and backwards
+
+        camEulerAngleY = mainCamera.transform.localEulerAngles.y;  //find the Y rotation angle as Eulers angle
+        if (camEulerAngleY > 180)
+        {
+            camEulerAngleY = (360 - camEulerAngleY) * -1;
+        }
+
+        transform.rotation = Quaternion.Euler(transform.rotation.x, camEulerAngleY, transform.rotation.z); //make the ball to follow along the camera position (y rotation Eulers)
     }   
 }

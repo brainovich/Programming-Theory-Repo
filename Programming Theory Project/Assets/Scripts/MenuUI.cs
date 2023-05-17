@@ -11,14 +11,12 @@ public class MenuUI : MonoBehaviour
     public void StartJumpingBall()
     {
         SceneManager.LoadScene(1);
-
         MainManager.Instance.m_gameMode = 0;
     }
 
     public void StartShootingBall()
     {
         SceneManager.LoadScene(1);
-
         MainManager.Instance.m_gameMode = 1;
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpingSphere : SphereControlls
+public class JumpingSphere : SphereControlls //INHERITANCE
 {
     private float jumpForce = 10f;
     
